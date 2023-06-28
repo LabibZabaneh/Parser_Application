@@ -1,0 +1,9 @@
+com/example/filter/LoginFilter.class
+com/example/servlet/HistoryTableServlet.class
+com/example/servlet/initServlet.class
+com/example/servlet/ParserServlet.class
+com/example/servlet/LoginServlet.class
+com/example/servlet/getDataServlet.class
+com/example/database/DatabaseUtility.class
+com/example/servlet/opDataServlet.class
+com/example/servlet/GoBackServlet.class
