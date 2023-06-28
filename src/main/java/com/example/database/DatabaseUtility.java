@@ -1,8 +1,13 @@
 package com.example.database;
-
+import javax.crypto.SecretKey;
 import java.sql.*;
 
+import static com.example.encryption.Encryption.*;
+
 public class DatabaseUtility {
+
+    private static SecretKey secretKey;
+    private static byte[] iv;
     private static Connection getConnection() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/Dynamic_Processor";
         String username = "root";
@@ -18,10 +23,12 @@ public class DatabaseUtility {
     }
 
     public static void createTable() throws SQLException {
+        secretKey = generateKey();
+        iv = generateIV();
         Connection con = getConnection();
         Statement statement = con.createStatement();
         createHistoryTable(con, statement);
-        createLoginTable(con ,statement);
+        createLoginTable(con, statement);
         con.commit();
         statement.close();
         con.close();
@@ -39,8 +46,10 @@ public class DatabaseUtility {
         statement.executeUpdate(dropTableQuery);
         String createTableQuery = "CREATE TABLE IF NOT EXISTS login (username VARCHAR(255) PRIMARY KEY, password VARCHAR(255))";
         statement.executeUpdate(createTableQuery);
-        String insertQuery = "INSERT INTO login (username, password) VALUES ('test', 'test')";
-        statement.executeUpdate(insertQuery);
+        String insertQuery = "INSERT INTO login (username, password) VALUES ('test', ?)";
+        PreparedStatement preparedStatement = con.prepareStatement(insertQuery);
+        preparedStatement.setString(1, encrypt("test", secretKey, iv));
+        preparedStatement.executeUpdate();
     }
 
     public static void applyQuery(String fileName, String columnName, Double average, Double sum) {
@@ -66,7 +75,8 @@ public class DatabaseUtility {
             ResultSet result = getTable("login");
             while (result.next()){
                 String usernameDatabase = result.getString("username");
-                String passwordDatabase = result.getString("password");
+                String encryptedPasswordDatabase = result.getString("password");
+                String passwordDatabase = decrypt(encryptedPasswordDatabase, secretKey, iv);
                 if (usernameDatabase.equals(username) && passwordDatabase.equals(password)){
                     return true;
                 }
