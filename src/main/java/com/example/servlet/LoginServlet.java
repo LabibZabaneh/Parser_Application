@@ -12,9 +12,9 @@ import static com.example.database.DatabaseUtility.checkLogin;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        session.setAttribute("username", req.getParameter("username"));
         if (checkLogin(req.getParameter("username"), req.getParameter("password"))){
+            HttpSession session = req.getSession();
+            session.setAttribute("username", true);
             req.getRequestDispatcher("upload.jsp").forward(req, resp);
         } else {
             resp.sendRedirect("login.jsp");
