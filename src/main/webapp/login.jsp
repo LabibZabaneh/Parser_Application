@@ -9,6 +9,14 @@
 <html>
 <head>
     <title>Login Page</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height:70vh;
+        }
+    </style>
 </head>
 <body>
     <div>
