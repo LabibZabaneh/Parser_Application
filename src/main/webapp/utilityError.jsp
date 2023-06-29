@@ -12,7 +12,7 @@
 </head>
 <body>
 <form action="previous-page-url" method="post">
-    <input type="hidden" name="fileName" value="index.jsp">
+    <input type="hidden" name="fileName" value="data.jsp">
     <button type="submit">Back</button>
 </form>
 <h1>Error</h1>
